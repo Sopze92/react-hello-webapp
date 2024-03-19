@@ -5,7 +5,7 @@ const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: [
-    './src/js/index.js'
+    './src/js/App.js'
   ],
   output: {
     filename: 'bundle.js',
@@ -26,17 +26,17 @@ module.exports = {
               loader: "css-loader" // translates CSS into CommonJS
           }]
         }, //css only files
-        {
-          test: /\.(png|svg|jpg|gif|jpeg|webp)$/, use: {
-            loader: 'file-loader',
-            options: { name: '[name].[ext]' }
-          }
-        }, //for images
+        //{
+        //  test: /\.(png|svg|jpg|gif|jpeg|webp)$/, use: {
+        //    loader: 'file-loader',
+        //    options: { name: '[name].[ext]' }
+        //  }
+        //}, //for images
         { test: /\.woff($|\?)|\.woff2($|\?)|\.ttf($|\?)|\.eot($|\?)|\.svg($|\?)/, use: ['file-loader'] } //for fonts
     ]
   },
   resolve: {
-    extensions: ['*', '.js']
+    extensions: ['*', '.js', '.jsx']
   },
   plugins: [
     new HtmlWebpackPlugin({

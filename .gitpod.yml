@@ -3,8 +3,7 @@ ports:
       onOpen: open-browser
 tasks:
     - init: >
-        npm install &&
-        cp .env.example .env
+        npm install
       command: >
         python docs/assets/greeting.py
 

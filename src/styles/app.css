@@ -1,0 +1,15 @@
+body {
+  color: #eee;
+  overflow-x: hidden;
+}
+
+.dev {
+  outline: 1px solid red;
+}
+
+#root {
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  min-height: 100vh;
+}
