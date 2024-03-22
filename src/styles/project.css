@@ -1,117 +1,50 @@
-.cl-modal {
-  background: #0006;
-  & .modal-dialog {
-    min-width: 40%;
-  }
-
-  & .cl-removalname {
-    color: #ff0;
-  }
-}
-
 i {
   display: inline-block;
   margin: auto;
 }
 
-.cl-icon {
+.sw-icon {
   width: 24px;
   height: 24px;
   background-size: contain;
 }
 
-.icon-address { background-image: url("../img/i_address.png")}
-.icon-email { background-image: url("../img/i_email.png")}
-.icon-phone { background-image: url("../img/i_phone.png")}
+.icon-bookmark { background-image: url("../img/i_bmark.png")}
+.icon-bookmark.active { background-image: url("../img/i_bmark_1.png")}
 .icon-cancel { background-image: url("../img/i_cancel.png")}
-.icon-check { background-image: url("../img/i_check.png")}
-.icon-edit { background-image: url("../img/i_edit.png")}
-.icon-delete { background-image: url("../img/i_delete.png")}
+.icon-info { background-image: url("../img/i_info.png")}
 
-.cl-emptylist{
-  width: 100%;
-  text-align: center;
-  font-size: 2rem;
-  color: #aaa5;
+#sw-radialmenu-container {
+  position: absolute;
+  inset: 0;
+  --cv-rm-x: 0; --cv-rm-y: 0;
+  --cv-rm-w: 0; --cv-rm-h: 0;
+  --cv-rmi-x: 0; --cv-rmi-y: 0;
 }
 
-.cl-contactcard {
-  background: #8881;
-  border: 1px solid #555;
-  box-shadow: inset 0 0 0px #8881;
+#sw-radialmenu {
+  position: absolute;
+  left: var(--cv-rm-x);
+  top: var(--cv-rm-y);
+  background: #222;
+  width: var(--cv-rm-w);
+  height: var(--cv-rm-h);
+  margin: calc(var(--cv-rm-h) * -0.5) 0 0 calc(var(--cv-rm-w) * -0.5);
+}
+
+#sw-radialmenu-itemgroup {
+}
+
+.sw-radialmenu-item {
+  list-style-type: none;
+  position: absolute;
+  margin: 50% 0 0 50%;
+  left: calc(var(--cv-rm-w) * var(--cv-rmi-x));
+  top: calc(var(--cv-rm-h) * var(--cv-rmi-y));
+  background: #0f0;
+  min-width: calc(var(--cv-rm-w) * .25);
+  transform: translate(-50%, -50%);
   &:hover {
-    border-color: #676767;
-    box-shadow: inset 0 0 16px #8881;
-    & .cl-avatar { scale: 1.1; }
-    & .cl-buttonpanel { 
-      opacity: 1.0; 
-      & .cl-cardbutton { scale: 1.0; } 
-    }
+    background: #f0f;
   }
-}
-
-.cl-buttonpanel { 
-  opacity: 0.0; 
-  & .cl-cardbutton { scale: .5; } 
-}
-
-.cl-contactcard, .cl-avatar, .cl-buttonpanel, .cl-cardbutton {
-  transition: all .25s;
-}
-
-.cl-separator {
-  width: 100%; 
-  border-bottom: 1px solid #aaa2; 
-}
-
-.cl-data {
-  display: block;
-  width: 100%; 
-  min-width: 64px;
-  height: 24px;
-  overflow: hidden;
-  & .cl-icon {
-    margin-right: 1ch;
-    margin-bottom: -.4rem;
-  }
-  &.cl-data-name { font-size: 1.2rem; font-weight: 700; height: 32px; }
-  &.cl-data-phone { font-size: .8rem; width: 150px; }
-  &.cl-data-email { font-size: 1.0rem; width: 550px; }
-  &.cl-data-email { font-size: 1.0rem; width: 350px; }
-}
-
-.cl-button {  width: 256px; }
-.cl-button-form {
-   width: 120px;
-   & .cl-icon {
-    margin-bottom: -.4rem;
-    margin-right: 1ch;
-   }
-}
-
-.cl-avatar {
-  user-select: none;
-  width: 96px;
-  height: 96px;
-  aspect-ratio: 1;
-}
-
-.cl-cardbutton {
-  width: 24px;
-  height: 24px;
-  border: none;
-  background: none;
-  opacity: 0.5;
-  &:hover {
-    opacity: 1.0;
-  }
-}
-
-.cl-input {
-  & .cl-icon {
-    margin-left: 1ch;
-    margin-bottom: -.4rem;
-  }
-  & label {margin-right: 1ch; width: 20%; min-width: 150px };
-  & input { width: 100% };
 }

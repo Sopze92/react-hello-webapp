@@ -1,24 +1,29 @@
 import React from "react";
-import agendaState from "./Flux.jsx";
+import storeState from "./Flux.jsx";
 
 export const Context = React.createContext(null);
 
 const AppContext= ReactComponent => {
-	const AgendaWrapper= ()=> {
-		const [state, setState] = React.useState(
-			agendaState({
-				getAgenda: () => state.agenda,
-				getActions: () => state.actions,
-				setAgenda: (newAgenda, replace=false) =>
-					setState({
-						agenda: replace ? newAgenda : Object.assign(state.agenda, newAgenda),
-						actions: { ...state.actions }
-					})
-			})
+	const StoreWrapper= ()=> {
+		const 
+			[state, setState] = React.useState(
+				storeState({
+					get: {
+						ready: () => state.ready,
+						store: () => state.store,
+						actions: () => state.actions,
+					},
+					set: {
+						ready: (newReady)=> _set({ ready: newReady }),
+						store: (newStore, replace)=> _set({ store: replace ? newStore : Object.assign(state.store, newStore) })
+					},
+				})
 		);
 
+		function _set(obj) { return setState(Object.assign(state, obj)) } // short for cloning the state while replacing some data, used in state setters
+
 		React.useEffect(() => {
-			state.actions.loadAgenda();
+			state.actions.initialize()
 		}, []);
 
 		return (
@@ -27,7 +32,7 @@ const AppContext= ReactComponent => {
 			</Context.Provider>
 		);
 	};
-	return AgendaWrapper
+	return StoreWrapper
 };
 
 export default AppContext
