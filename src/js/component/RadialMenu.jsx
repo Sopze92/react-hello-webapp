@@ -1,7 +1,10 @@
 import React from 'react'
 
+const RAD2DEG= 180 / Math.PI;
+
 // seriously with no clamp() in vanilla js? is just dumb ¯\_(-.-)_/¯
-function _clamp(n, min, max) {return n<min?min:n>max?max:n} 
+function _clamp(n, min, max) { return n<min?min:n>max?max:n }
+function _rad2deg(rad) { return rad * RAD2DEG}
 
 /** Custom hook to handle a long click/touch performed inside an element boundaries */
 const useLongClick= (element, ms)=>{
@@ -53,28 +56,29 @@ const useLongClick= (element, ms)=>{
 }
 
 // radialmenu component
-const RadialMenu= ({ boundsElement, size, items })=>{
+const RadialMenu= ({ boundsElement, measures, items })=>{
 
   const 
     radialContainer= React.useRef(null),
     heldInfo= useLongClick(boundsElement, 200),
-    radialAngle= (Math.PI*2/items.length),
     [ radialMenu, setRadialMenu ]= React.useState({state:false})
 
   React.useEffect(()=>{
-    if(heldInfo.state && !radialMenu.state){ 
+    if(heldInfo.state && !radialMenu.state){
 
       // limit spawn coords just to prevent rendering the radial out of viewport
 
       const radialInfo= structuredClone(heldInfo)
-      radialInfo.originX= _clamp(radialInfo.originX, size*.5, window.innerWidth - size*.5)
-      radialInfo.originY= _clamp(radialInfo.originY, size*.5, window.innerHeight - size*.5)
+      radialInfo.originX= _clamp(radialInfo.originX, measures.sizeHalf, window.innerWidth - measures.sizeHalf)
+      radialInfo.originY= _clamp(radialInfo.originY, measures.sizeHalf, window.innerHeight - measures.sizeHalf)
       radialInfo.moveDelay= 12;
 
       radialInfo.mouse= (e)=>{
         if(radialInfo.moveDelay > 0) radialInfo.moveDelay--
         else{
-          console.log(e);
+          let rad = Math.atan2(e.y - radialInfo.originY, e.x - radialInfo.originX) + Math.PI*.5
+          if(rad < 0 ? rad+Math.PI : rad)
+          _getItemAtAngle(rad)
         }
       }
 
@@ -90,11 +94,16 @@ const RadialMenu= ({ boundsElement, size, items })=>{
     console.log(e)
   }
 
-  function _getItemLocation(idx){
-    const ang= radialAngle * idx;
+  function _getItemLocation(rad){
     return { 
-      "--cv-rmi-x": Math.sin(ang) * .35, 
-      "--cv-rmi-y": Math.cos(ang) * -.35 
+      "--cv-rmi-x": Math.sin(rad) * measures.itemOffset, 
+      "--cv-rmi-y": Math.cos(rad) * -measures.itemOffset 
+    }
+  }
+
+  function _getItemAtAngle(rad){
+    for(let i=0; i<items.length; i++){
+      
     }
   }
 
@@ -106,12 +115,12 @@ const RadialMenu= ({ boundsElement, size, items })=>{
         <div onClick={(e)=>handleClick(e)}>
           <div id="sw-radialmenu" style={{
             "--cv-rm-x": `${radialMenu.originX}px`, "--cv-rm-y": `${radialMenu.originY}px`,
-            "--cv-rm-w": `${size}px`, "--cv-rm-h": `${size}px`
+            "--cv-rm-w": `${measures.size}px`, "--cv-rm-h": `${measures.size}px`
             }}>
             <ul className="text-center sw-radialmenu-itemgroup">
               {
                 items.map((e,i)=>
-                    <li key={`ri${i}`} className="px-4 py-2 sw-radialmenu-item" style={_getItemLocation(i)}>{e.label}</li>
+                    <li key={`ri${i}`} className="px-4 py-2 sw-radialmenu-item" style={_getItemLocation(e.rad)}>{e.label}</li>
                   )
               }
             </ul>

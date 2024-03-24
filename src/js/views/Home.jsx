@@ -18,6 +18,7 @@ const Home= () => {
 	const 
 		{ store } = React.useContext(Context),
 		radialMenuZone= React.useRef(null),
+		measures= {size:450, sizeHalf: 225, radPerItem:Math.PI*2/items.length, itemOffset: .35},
 		nav= useNavigate()
 
 		const items= [
@@ -29,13 +30,15 @@ const Home= () => {
 			{ label: "vehicles" }
 		]
 
+		items.forEach((e,i)=> e.rad= measures.radPerItem * i)
+
 	return (
 		<>
 			<div className="col-12 col-lg-8 d-flex flex-column m-4 p-4 gap-3">
 				<div ref={radialMenuZone} className="row d-flex justify-content-center bg-danger w-100 h-100">
 				</div>
 			</div>
-			<RadialMenu boundsElement={radialMenuZone} size={450} items={items} />
+			<RadialMenu boundsElement={radialMenuZone} measures={measures} items={items} />
 		</>
 	)
 }
