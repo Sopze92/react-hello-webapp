@@ -55,55 +55,75 @@ const useLongClick= (element, ms)=>{
 	return heldInfo;
 }
 
-// radialmenu component
+// ---------------------------------------------------------------------------- radialmenu component
 const RadialMenu= ({ boundsElement, measures, items })=>{
 
   const 
     radialContainer= React.useRef(null),
     heldInfo= useLongClick(boundsElement, 200),
-    [ radialMenu, setRadialMenu ]= React.useState({state:false})
+    [ radialMenu, setRadialMenu ]= React.useState({state:false}),
+    [ mouseCoords, setMouseCoords ]= React.useState(null),
+    [ activeItem, setActiveItem ]= React.useState(-1)
 
+  // open menu effect
   React.useEffect(()=>{
     if(heldInfo.state && !radialMenu.state){
 
       // limit spawn coords just to prevent rendering the radial out of viewport
 
       const radialInfo= structuredClone(heldInfo)
-      radialInfo.originX= _clamp(radialInfo.originX, measures.sizeHalf, window.innerWidth - measures.sizeHalf)
-      radialInfo.originY= _clamp(radialInfo.originY, measures.sizeHalf, window.innerHeight - measures.sizeHalf)
-      radialInfo.moveDelay= 12;
-
-      radialInfo.mouse= (e)=>{
-        if(radialInfo.moveDelay > 0) radialInfo.moveDelay--
-        else{
-          let rad = Math.atan2(e.y - radialInfo.originY, e.x - radialInfo.originX) + Math.PI*.5
-          if(rad < 0 ? rad+Math.PI : rad)
-          _getItemAtAngle(rad)
-        }
-      }
-
-      document.addEventListener('mousemove', radialInfo.mouse)
-      
+      let sizeHalf= measures.size*.5;
+      radialInfo.originX= _clamp(radialInfo.originX, sizeHalf, window.innerWidth - sizeHalf)
+      radialInfo.originY= _clamp(radialInfo.originY, sizeHalf, window.innerHeight - sizeHalf)
+      document.addEventListener('mousemove', _setMouseCoords) 
       setRadialMenu(radialInfo)
-      return ()=>{ document.removeEventListener('mousemove', radialInfo.mouse) }
+      return ()=>{
+        setMouseCoords(null)
+        document.removeEventListener('mousemove', _setMouseCoords) 
+      }
     }
   },[heldInfo])
+
+  // mouse position effect
+  // using this func as a listener arg instead on useEffect made this func unable to get current activeItem, the value was always whatever it was at addEventListener's call
+  // this is a workaround to ensure activeItem is the current value on hovered update function so we dont re-assign the value all the time to its exact same value
+  React.useEffect(()=>{
+    if(mouseCoords){
+      const 
+        pos= { x: mouseCoords.x - radialMenu.originX, y: mouseCoords.y - radialMenu.originY},
+        mag= Math.sqrt(pos.x**2 + pos.y**2)
+
+      if(mag > measures.size*.25){
+
+        let rad = Math.atan2(pos.y, pos.x) + Math.PI*.5 + measures.radPerItem*.5
+        if(rad < 0) rad+= Math.PI*2
+
+        const item= (rad/measures.radPerItem) >>> 0;
+        _setActiveItem(item)
+      }
+      else _setActiveItem(-1)
+    }
+
+    function _setActiveItem(idx){
+      if(activeItem != idx) setActiveItem(idx)
+    }
+  },[mouseCoords])
+
+  function _setMouseCoords(e){ setMouseCoords({x: e.x, y: e.y})}
+
+  // handlers
 
   function handleClick(e){
     if((e.touches && e.touches[0].target=== radialContainer.current) || e.target=== radialContainer.current) setRadialMenu({state:false})
     console.log(e)
   }
 
+  // helpers / util
+
   function _getItemLocation(rad){
     return { 
       "--cv-rmi-x": Math.sin(rad) * measures.itemOffset, 
       "--cv-rmi-y": Math.cos(rad) * -measures.itemOffset 
-    }
-  }
-
-  function _getItemAtAngle(rad){
-    for(let i=0; i<items.length; i++){
-      
     }
   }
 
@@ -120,7 +140,7 @@ const RadialMenu= ({ boundsElement, measures, items })=>{
             <ul className="text-center sw-radialmenu-itemgroup">
               {
                 items.map((e,i)=>
-                    <li key={`ri${i}`} className="px-4 py-2 sw-radialmenu-item" style={_getItemLocation(e.rad)}>{e.label}</li>
+                    <li key={`ri${i}`} className={`px-4 py-2 sw-radialmenu-item ${activeItem===i ? "active" : ""}`} style={_getItemLocation(e.rad)}>{e.label}</li>
                   )
               }
             </ul>

@@ -20,7 +20,13 @@ const AppContext= ReactComponent => {
 				})
 		);
 
-		function _set(obj) { return setState(Object.assign(state, obj)) } // short for cloning the state while replacing some data, used in state setters
+		function _set(obj) { setState(
+			Object.assign({
+				ready: state.ready,
+				store: state.store,
+				actions: state.actions,
+			}, obj)
+		)} // short for cloning the state while replacing some data, used in state setters
 
 		React.useEffect(() => {
 			state.actions.initialize()

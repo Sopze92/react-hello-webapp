@@ -44,7 +44,9 @@ i {
   background: #0f0;
   min-width: calc(var(--cv-rm-w) * .25);
   transform: translate(-50%, -50%);
-  &:hover {
+  &.active {
     background: #f0f;
   }
+
+  transition: background .125s;
 }
