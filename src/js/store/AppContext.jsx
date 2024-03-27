@@ -11,11 +11,13 @@ const AppContext= ReactComponent => {
 					get: {
 						ready: () => state.ready,
 						store: () => state.store,
+						saved: () => state.saved,
 						actions: () => state.actions,
 					},
 					set: {
 						ready: (newReady)=> _set({ ready: newReady }),
-						store: (newStore, replace)=> _set({ store: replace ? newStore : Object.assign(state.store, newStore) })
+						store: (newStore, replace)=> _set({ store: replace ? newStore : Object.assign(state.store, newStore) }),
+						saved: (newSaved)=> _set({ saved: newSaved })
 					},
 				})
 		);
@@ -24,6 +26,7 @@ const AppContext= ReactComponent => {
 			Object.assign({
 				ready: state.ready,
 				store: state.store,
+				saved: state.saved,
 				actions: state.actions,
 			}, obj)
 		)} // short for cloning the state while replacing some data, used in state setters

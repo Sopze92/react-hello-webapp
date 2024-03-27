@@ -21,19 +21,24 @@ const
 const Home= () => {
 
 	const 
-		{ store } = React.useContext(Context),
+		{ ready, store } = React.useContext(Context),
 		radialMenuZone= React.useRef(null),
 		measures= {size:450, radPerItem:Math.PI*2/RADIAL_ITEMS, itemOffset: .35},
 		items= Array.from({length:RADIAL_ITEMS}, (_,i)=> ({ label: RADIAL_ITEM_LABEL[i], rad: measures.radPerItem * i})),
 		nav= useNavigate()
 
+	function handleRadialSelection(idx){
+    console.log(`selection: ${idx}`)
+	}
+
 	return (
 		<>
 			<div className="col-12 col-lg-8 d-flex flex-column m-4 p-4 gap-3">
 				<div ref={radialMenuZone} className="row d-flex justify-content-center bg-light-subtle w-100 h-100">
+					<p>ready {ready}</p>
 				</div>
 			</div>
-			<RadialMenu boundsElement={radialMenuZone} measures={measures} items={items} />
+			<RadialMenu boundsElement={radialMenuZone} measures={measures} items={items} callback={handleRadialSelection} />
 		</>
 	)
 }

@@ -14,39 +14,77 @@ i {
 .icon-cancel { background-image: url("../img/i_cancel.png")}
 .icon-info { background-image: url("../img/i_info.png")}
 
-#sw-radialmenu-container {
+#rm-container {
   position: absolute;
   inset: 0;
   --cv-rm-x: 0; --cv-rm-y: 0;
   --cv-rm-w: 0; --cv-rm-h: 0;
   --cv-rmi-x: 0; --cv-rmi-y: 0;
+  --cv-rm-a: 0;
 }
 
-#sw-radialmenu {
+#rm-object {
   position: absolute;
   left: var(--cv-rm-x);
   top: var(--cv-rm-y);
-  background: #222;
+  background: none;
   width: var(--cv-rm-w);
   height: var(--cv-rm-h);
   margin: calc(var(--cv-rm-h) * -0.5) 0 0 calc(var(--cv-rm-w) * -0.5);
+
+  &.rm-anim-open { 
+    animation: rm-show 125ms both ease-out; 
+    & .rm-pointer { animation: rm-show-pointer 125ms both ease-out; }
+  }
+  &.rm-anim-hide { 
+    animation: rm-hide 125ms both ease-out; 
+  }
 }
 
-#sw-radialmenu-itemgroup {
-}
+@keyframes rm-show { 0% { scale: 0.0 } 85% { scale: 1.1 } 100% { scale: 1.0 } }
+@keyframes rm-hide { from { scale: 1.0 } to { scale: 0.0 } }
 
-.sw-radialmenu-item {
-  list-style-type: none;
+.rm-pointer{
   position: absolute;
+  inset: 35%;
+  background: none;
+  border: 8px solid #0002;
+  border-top-color: #877;
+  border-radius: 100%;
+  transform: rotate(var(--cv-rm-a));
+  box-shadow: 0 0 12px #2114, inset 0 0 12px #2114, 0 0 1px #766, inset 0 0 1px #766;
+}
+
+@keyframes rm-show-pointer { 0% { scale: 4.0; } 25% { scale: 2.0; } 100% { scale: 1.0; } }
+@keyframes rm-hide-pointer { from { scale: 1.0 } to { scale: 0.0 } }
+
+#rm-itemgroup {
+}
+
+.rm-item {
+  position: absolute; user-select: none; list-style-type: none;
   margin: 50% 0 0 50%;
   left: calc(var(--cv-rm-w) * var(--cv-rmi-x));
   top: calc(var(--cv-rm-h) * var(--cv-rmi-y));
-  background: #0f0;
   min-width: calc(var(--cv-rm-w) * .25);
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(1.0);
+
+  border-radius: 16px;
+  letter-spacing: .2rem;
+  font-variant: small-caps;
+  outline: 0px solid #8770;
+
+  height: 40px;
+  line-height: 1.25em;
+
+  background: #0006;
+
   &.active {
-    background: #f0f;
+    background: #3336;
+    outline: 4px solid #877;
+    box-shadow: 0 0 12px #a99;
+    transform: translate(-50%, -50%) scale(1.1);
   }
 
-  transition: background .125s;
+  transition: all .125s;
 }
