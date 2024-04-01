@@ -29,9 +29,8 @@ const useLongClick= (element, ms)=>{
 		if(element.current){
 			const bbox= element.current.getBoundingClientRect();
 			if(pos.x >= bbox.left && pos.x < bbox.right && pos.y >= bbox.top && pos.y < bbox.bottom){
+				e.preventDefault(); e.stopPropagation()
 				setIntervalId(setTimeout(()=>{
-					e.stopPropagation()
-					e.preventDefault()
 					setHeldInfo({state: true, mouse: mus, originX: pos.x, originY: pos.y})
 				}, ms))
 			}
@@ -41,6 +40,7 @@ const useLongClick= (element, ms)=>{
 	function handleMouseUp(e) {
 		window.removeEventListener('mouseup', handleMouseUp)
 		window.removeEventListener('touchend', handleMouseUp)
+		e.preventDefault(); e.stopPropagation()
 		clearTimeout(intervalId)
 		setIntervalId(-1)
 		setHeldInfo({state: false})

@@ -11,8 +11,9 @@ const Layout = () => {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route exact path="/" element={<Home />} />
-					<Route path="/:bank/:id" element={<Detail />} />
+				<Route exact path="/" element={<Home/>} />
+				<Route exact path="/bookmarks" element={<Home viewBookmarks/>} />
+				<Route path="/:type/:uid" element={<Detail/>} />
 				<Route path="*" element={<h1>404</h1>} />
 			</Routes>
 		</BrowserRouter>
