@@ -137,7 +137,7 @@ const storeState = ({ get, set }) => {
 
 				set.ready({ state: false })
 
-				// using sessionStorage for this, not localStorage
+				// using sessionStorage basic api lists, localStorage for bookmarks
 				const 
 					api_paths= enableStorage ? _getFromSessionStorage("ss_apiPaths") : {},
 					api_store= enableStorage ? _getFromSessionStorage("ss_apiStore") : {},

@@ -33,6 +33,10 @@ import EntityCard, { EntityCard_Placeholder } from "../component/EntityCard.jsx"
 			-	Click anywhere inside the card to show a bigger version as a modal
 			-	INFO button will navigate to details page
 			-	BOOKMARK button will add/remove the item from bookmarks
+
+	--- NOTES ---
+
+	Details is a mess, and some JSX here and there too, this project was taking too long so I started to get things done fast and ugly
 */
 
 const Home= ({ viewBookmarks=false }) => {
